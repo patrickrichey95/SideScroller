@@ -74,8 +74,8 @@ class Plane {
     }
 
     update() {
-        this.image.x = stage.mouseX;
-		this.image.y = stage.mouseY;
+        this.image.y = stage.mouseY;
+        this.image.x = 40;
     }
 }
 
@@ -84,26 +84,26 @@ class Island {
     image: createjs.Bitmap;
     width: number;
     height: number;
-    dy: number;
+    dx: number;
     constructor() {
         this.image = new createjs.Bitmap(queue.getResult("island"));
         this.width = this.image.getBounds().width;
         this.height = this.image.getBounds().height;
         this.image.regX = this.width * 0.5;
         this.image.regY = this.height * 0.5;
-        this.dy = 5;
+        this.dx = 5;
         stage.addChild(this.image);
         this.reset();
     }
 
     reset() {
-        this.image.y = -this.height;
-        this.image.x = Math.floor(Math.random() * stage.canvas.width);
+        this.image.y = stage.canvas.width + this.width;
+        this.image.x = Math.floor(Math.random() * stage.canvas.height);
     }
 
     update() {
-        this.image.y += this.dy;
-        if (this.image.y >= (this.height + stage.canvas.height)) {
+        this.image.x += this.dx;
+        if (this.image.x >= (0 - this.width)) {
             this.reset();
         }
     }
@@ -127,18 +127,20 @@ class Cloud {
     }
 
     reset() {
-        this.image.y = -this.height;
-        this.image.x = Math.floor(Math.random() * stage.canvas.width);
-        this.dy = Math.floor(Math.random() * 5 + 5);
-        this.dx = Math.floor(Math.random() * 4 - 2);
+        this.image.x = stage.canvas.width + this.width;
+        this.image.y = Math.floor(Math.random() * stage.canvas.height);
+        this.dx = Math.floor(Math.random() * 5 + 5);
+        this.dy = Math.floor(Math.random() * 4 - 2);
     }
 
     update() {
         this.image.y += this.dy;
         this.image.x += this.dx;
-        if (this.image.y >= (this.height + stage.canvas.height)) {
-            this.reset();
+        if (this.image.x >= 0) {
+            stage.removeChild(this.image);
         }
+        this.reset();
+        stage.addChild(this.image);
     }
 }
 
@@ -147,23 +149,23 @@ class Ocean {
     image: createjs.Bitmap;
     width: number;
     height: number;
-    dy: number;
+    dx: number;
     constructor() {
         this.image = new createjs.Bitmap(queue.getResult("ocean"));
         this.width = this.image.getBounds().width;
         this.height = this.image.getBounds().height;
-        this.dy = 5;
+        this.dx = -10;
         stage.addChild(this.image);
         this.reset();
     }
 
     reset() {
-        this.image.y = -960;
+        this.image.x = 0;
     }
 
     update() {
-        this.image.y += this.dy;
-        if (this.image.y >= 0) {
+        this.image.x += this.dx;
+        if (this.image.x >= 0) {
             this.reset();
         }
     }
